@@ -30,7 +30,6 @@ public class DiscordChannelContentController
             return "";
         }
 
-
         return this.channelList.getChannels().get(channelId).toString();
     }
 }
