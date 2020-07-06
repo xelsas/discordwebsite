@@ -1,5 +1,6 @@
-package nl.xanderelsas.discordwebsite.model.channellist;
+package nl.xanderelsas.discordwebsite.services.channellist;
 
+import nl.xanderelsas.discordwebsite.model.channellist.Message;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -7,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Used to build a channel containing a list of messages generated using data from a discord server.
+ * Used to build a list of messages containing generated using data from a discord server.
  */
 @Service
 public class MessageListFactory {

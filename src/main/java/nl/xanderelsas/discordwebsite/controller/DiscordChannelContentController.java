@@ -1,6 +1,7 @@
 package nl.xanderelsas.discordwebsite.controller;
 
-import nl.xanderelsas.discordwebsite.model.channellist.ChannelList;
+import nl.xanderelsas.discordwebsite.services.channellist.ChannelMapService;
+import nl.xanderelsas.discordwebsite.services.channellist.ChannelService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,25 +12,27 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class DiscordChannelContentController
 {
-    private ChannelList channelList;
+    private ChannelMapService channelMapService;
 
-    public DiscordChannelContentController(ChannelList channelList) {
-        this.channelList = channelList;
+    public DiscordChannelContentController(ChannelMapService channelMapService) {
+        this.channelMapService = channelMapService;
     }
 
     @GetMapping(value = {"/","/channel"}, produces = MediaType.TEXT_PLAIN_VALUE)
     public String channelList() {
 
-        return this.channelList.toString();
+        return this.channelMapService.toString();
     }
 
     @GetMapping(value = "/channel/{channelId}", produces = MediaType.TEXT_PLAIN_VALUE)
     public String channelContent(@PathVariable String channelId, HttpServletResponse response) {
-        if (!this.channelList.getChannels().containsKey(channelId)) {
+        ChannelService channelService = this.channelMapService.getChannelService(channelId);
+
+        if (channelService == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return "";
         }
 
-        return this.channelList.getChannels().get(channelId).toString();
+        return channelService.toString();
     }
 }

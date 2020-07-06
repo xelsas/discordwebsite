@@ -7,9 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import nl.xanderelsas.discordwebsite.model.channellist.Channel;
-import nl.xanderelsas.discordwebsite.model.channellist.ChannelListFactory;
+import nl.xanderelsas.discordwebsite.services.channellist.ChannelMapFactory;
 import nl.xanderelsas.discordwebsite.model.channellist.Message;
-import nl.xanderelsas.discordwebsite.model.channellist.MessageListFactory;
+import nl.xanderelsas.discordwebsite.services.channellist.MessageListFactory;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Mockito;
@@ -33,17 +33,17 @@ public class DiscordWebsiteApplicationTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ChannelListFactory channelListFactory;
+    private ChannelMapFactory channelMapFactory;
 
     @MockBean
     private MessageListFactory messageListFactory;
 
     private void setupMocks() {
         Map<String, Channel> channelMap = new LinkedHashMap<>();
-        channelMap.put("channel_key_1", new Channel(messageListFactory, "channel_key_1", "channel 1"));
-        channelMap.put("2", new Channel(messageListFactory, "2", "channel 2"));
+        channelMap.put("channel_key_1", new Channel("channel_key_1", "channel 1"));
+        channelMap.put("2", new Channel("2", "channel 2"));
 
-        Mockito.when(channelListFactory.build(Mockito.any(MessageListFactory.class))).thenReturn(channelMap);
+        Mockito.when(channelMapFactory.build()).thenReturn(channelMap);
 
         List<Message> messages = new LinkedList<Message>();
         messages.add(new Message("test_author", LocalDateTime.parse("2015-02-20T06:30:00"), "test_content"));
