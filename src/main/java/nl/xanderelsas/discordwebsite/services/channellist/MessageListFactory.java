@@ -8,10 +8,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Used to build a list of messages containing generated using data from a discord server.
+ * Used to build a list of {@link Message} objects generated using data from a Discord server.
  */
 @Service
 public class MessageListFactory {
+    /**
+     *
+     * @param channelId
+     * @return a list of {@link Message} objects for the given channelId generated using data from a discord server.
+     */
     public List<Message> build(String channelId) {
         List<Message> messages = new LinkedList<Message>();
 

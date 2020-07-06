@@ -6,8 +6,8 @@ import nl.xanderelsas.discordwebsite.model.channellist.Message;
 import java.util.List;
 
 /**
- * Used for handling a channel, capable of fetching a list of
- * messages generated using data from a discord server.
+ * Used for handling a {@link Channel}, capable of fetching a list of
+ * {@link Message} objects generated using data from a Discord server.
  */
 public class ChannelService {
     private MessageListFactory messageListFactory;

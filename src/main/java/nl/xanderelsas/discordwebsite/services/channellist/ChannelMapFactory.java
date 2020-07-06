@@ -7,10 +7,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Used to build a map of channels generated using data from a discord server.
+ * Used to build a map of {@link Channel} objects generated using data from a Discord server.
  */
 @Service
 public class ChannelMapFactory {
+    /**
+     * @return a map of {@link Channel} objects generated using data from a Discord server.
+     */
     public Map<String, Channel> build() {
         Map<String, Channel> channelMap = new LinkedHashMap<>();
 

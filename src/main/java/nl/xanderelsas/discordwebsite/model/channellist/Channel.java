@@ -1,7 +1,7 @@
 package nl.xanderelsas.discordwebsite.model.channellist;
 
 /**
- * Represents a channel containing a list of messages generated using data from a discord server.
+ * Represents a channel containing a list of messages generated using data from a Discord server.
  */
 public class Channel {
     private String id;

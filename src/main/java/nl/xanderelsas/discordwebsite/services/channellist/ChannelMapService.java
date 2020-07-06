@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * Service used for handling the available Channel models, and creating
- * ChannelService objects for handling the Channel objects.
+ * Service used for handling the available {@link Channel} models, and creating
+ * {@link ChannelService} objects for handling the {@link Channel} objects.
  */
 @Service
 public class ChannelMapService {
@@ -18,6 +18,9 @@ public class ChannelMapService {
     private ChannelMapFactory channelMapFactory;
     private Map<String, Channel> channelMap;
 
+    /**
+     * @return a {@link Map} of all available channels in the Discord server, represented by {@link Channel} objects.
+     */
     public Map<String, Channel> getChannelMap() {
         if (this.channelMap == null) {
             this.channelMap = this.channelMapFactory.build();
@@ -26,6 +29,13 @@ public class ChannelMapService {
         return this.channelMap;
     }
 
+    /**
+     * Used to build a {@link ChannelService} object, given a channelId.
+     *
+     * @param channelId
+     * @return {@link ChannelService} object for the {@link Channel} with the given channelId,
+     *         or null if no {@link Channel} with the given channelId could be found
+     */
     public ChannelService getChannelService(String channelId) {
         if (!this.getChannelMap().containsKey(channelId)) {
             return null;
