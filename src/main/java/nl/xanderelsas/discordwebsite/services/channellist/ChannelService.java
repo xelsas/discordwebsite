@@ -2,11 +2,9 @@ package nl.xanderelsas.discordwebsite.services.channellist;
 
 import nl.xanderelsas.discordwebsite.model.channellist.Channel;
 import nl.xanderelsas.discordwebsite.model.channellist.ChannelDefinition;
-import nl.xanderelsas.discordwebsite.model.channellist.Message;
 
 /**
- * Used for handling a {@link ChannelDefinition}, capable of fetching a list of
- * {@link Message} objects generated using data from a Discord server.
+ * Used for creating a {@link Channel}, when given a {@link ChannelDefinition}.
  */
 public class ChannelService {
     private Channel channel;
