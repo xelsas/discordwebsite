@@ -10,7 +10,7 @@ import java.util.Map;
  * Used to build a map of {@link ChannelDefinition} objects generated using data from a Discord server.
  */
 @Service
-public class ChannelMapFactory {
+public class ChannelDefinitionMapFactory {
     /**
      * @return a map of {@link ChannelDefinition} objects generated using data from a Discord server.
      */

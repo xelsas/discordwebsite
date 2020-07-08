@@ -11,11 +11,11 @@ import java.util.Map;
  * {@link ChannelService} objects for handling the {@link ChannelDefinition} objects.
  */
 @Service
-public class ChannelMapService {
+public class ChannelDefinitionMapService {
     @Autowired
     private MessageListFactory messageListFactory;
     @Autowired
-    private ChannelMapFactory channelMapFactory;
+    private ChannelDefinitionMapFactory channelDefinitionMapFactory;
     private Map<String, ChannelDefinition> channelMap;
 
     /**
@@ -23,7 +23,7 @@ public class ChannelMapService {
      */
     public Map<String, ChannelDefinition> getChannelMap() {
         if (this.channelMap == null) {
-            this.channelMap = this.channelMapFactory.build();
+            this.channelMap = this.channelDefinitionMapFactory.build();
         }
 
         return this.channelMap;

@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import nl.xanderelsas.discordwebsite.model.channellist.ChannelDefinition;
-import nl.xanderelsas.discordwebsite.services.channellist.ChannelMapFactory;
+import nl.xanderelsas.discordwebsite.services.channellist.ChannelDefinitionMapFactory;
 import nl.xanderelsas.discordwebsite.model.channellist.Message;
 import nl.xanderelsas.discordwebsite.services.channellist.MessageListFactory;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class DiscordWebsiteApplicationTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ChannelMapFactory channelMapFactory;
+    private ChannelDefinitionMapFactory channelDefinitionMapFactory;
 
     @MockBean
     private MessageListFactory messageListFactory;
@@ -43,7 +43,7 @@ public class DiscordWebsiteApplicationTest {
         channelMap.put("channel_key_1", new ChannelDefinition("channel_key_1", "channel 1"));
         channelMap.put("2", new ChannelDefinition("2", "channel 2"));
 
-        Mockito.when(channelMapFactory.build()).thenReturn(channelMap);
+        Mockito.when(channelDefinitionMapFactory.build()).thenReturn(channelMap);
 
         List<Message> messages = new LinkedList<Message>();
         messages.add(new Message("test_author", LocalDateTime.parse("2015-02-20T06:30:00"), "test_content"));
@@ -66,7 +66,7 @@ public class DiscordWebsiteApplicationTest {
         setupMocks();
 
         this.mockMvc.perform(
-                get("/channel")).andDo(print()).andExpect(status().isOk())
+                get("/channels")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("{\"channel_key_1\":{\"id\":\"channel_key_1\",\"name\":\"channel 1\"},\"2\":{\"id\":\"2\",\"name\":\"channel 2\"}}")));
     }
 
