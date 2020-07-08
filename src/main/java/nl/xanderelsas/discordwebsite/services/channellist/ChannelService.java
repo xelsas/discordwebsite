@@ -2,36 +2,51 @@ package nl.xanderelsas.discordwebsite.services.channellist;
 
 import nl.xanderelsas.discordwebsite.model.channellist.Channel;
 import nl.xanderelsas.discordwebsite.model.channellist.ChannelDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
- * Used for creating a {@link Channel}, when given a {@link ChannelDefinition}.
+ * Service used for handling the available {@link ChannelDefinition} models, and creating
+ * {@link Channel} objects from {@link ChannelDefinition} objects.
  */
+@Service
 public class ChannelService {
-    private Channel channel;
+    @Autowired
     private MessageListFactory messageListFactory;
-    private ChannelDefinition channelDefinition;
+    @Autowired
+    private ChannelDefinitionMapFactory channelDefinitionMapFactory;
+    private Map<String, ChannelDefinition> channelMap;
 
-    public ChannelService(MessageListFactory messageListFactory, ChannelDefinition channelDefinition) {
-        this.messageListFactory = messageListFactory;
-        this.channelDefinition = channelDefinition;
-    }
-
-    public MessageListFactory getMessageListFactory() {
-        return messageListFactory;
-    }
-
-    public ChannelDefinition getChannelDefinition() {
-        return channelDefinition;
-    }
-
-    public Channel getChannel() {
-        if (this.channel == null) {
-            this.channel = new Channel(
-                    this.getChannelDefinition(),
-                    this.getMessageListFactory().build(channelDefinition.getId())
-            );
+    /**
+     * @return a {@link Map} of all available channels in the Discord server, represented by {@link ChannelDefinition} objects.
+     */
+    public Map<String, ChannelDefinition> getChannelMap() {
+        if (this.channelMap == null) {
+            this.channelMap = this.channelDefinitionMapFactory.build();
         }
 
-        return channel;
+        return this.channelMap;
+    }
+
+    /**
+     * Used to build a {@link Channel} object, given a channelId.
+     *
+     * @param channelId channel id of the {@link ChannelDefinition} you wish to build a {@link Channel} object for.
+     * @return {@link Channel} object for the {@link ChannelDefinition} with the given channelId,
+     *         or null if no {@link ChannelDefinition} with the given channelId could be found
+     */
+    public Channel getChannel(String channelId) {
+        ChannelDefinition channelDefinition = this.getChannelMap().get(channelId);
+
+        if (channelDefinition == null) {
+            return null;
+        }
+
+        return new Channel(
+                channelDefinition,
+                this.messageListFactory.build(channelDefinition.getId())
+        );
     }
 }
