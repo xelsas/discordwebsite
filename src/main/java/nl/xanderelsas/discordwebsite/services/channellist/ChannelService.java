@@ -10,8 +10,8 @@ import nl.xanderelsas.discordwebsite.model.channellist.Message;
  */
 public class ChannelService {
     private Channel channel;
-    private final MessageListFactory messageListFactory;
-    private final ChannelDefinition channelDefinition;
+    private MessageListFactory messageListFactory;
+    private ChannelDefinition channelDefinition;
 
     public ChannelService(MessageListFactory messageListFactory, ChannelDefinition channelDefinition) {
         this.messageListFactory = messageListFactory;
