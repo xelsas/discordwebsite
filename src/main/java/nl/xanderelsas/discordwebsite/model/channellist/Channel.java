@@ -1,22 +1,24 @@
 package nl.xanderelsas.discordwebsite.model.channellist;
 
+import java.util.List;
+
 /**
  * Represents a channel containing a list of messages generated using data from a Discord server.
  */
 public class Channel {
-    private String id;
-    private String name;
+    private ChannelDefinition channelDefinition;
+    private List<Message> messages;
 
-    public Channel(String id, String name) {
-        this.id = id;
-        this.name = name;
+    public Channel(ChannelDefinition channelDefinition, List<Message> messages) {
+        this.channelDefinition = channelDefinition;
+        this.messages = messages;
     }
 
-    public String getId() {
-        return id;
+    public ChannelDefinition getChannelDefinition() {
+        return channelDefinition;
     }
 
-    public String getName() {
-        return name;
+    public List<Message> getMessages() {
+        return messages;
     }
 }

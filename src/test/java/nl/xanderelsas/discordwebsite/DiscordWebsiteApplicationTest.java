@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import nl.xanderelsas.discordwebsite.model.channellist.Channel;
+import nl.xanderelsas.discordwebsite.model.channellist.ChannelDefinition;
 import nl.xanderelsas.discordwebsite.services.channellist.ChannelMapFactory;
 import nl.xanderelsas.discordwebsite.model.channellist.Message;
 import nl.xanderelsas.discordwebsite.services.channellist.MessageListFactory;
@@ -39,9 +39,9 @@ public class DiscordWebsiteApplicationTest {
     private MessageListFactory messageListFactory;
 
     private void setupMocks() {
-        Map<String, Channel> channelMap = new LinkedHashMap<>();
-        channelMap.put("channel_key_1", new Channel("channel_key_1", "channel 1"));
-        channelMap.put("2", new Channel("2", "channel 2"));
+        Map<String, ChannelDefinition> channelMap = new LinkedHashMap<>();
+        channelMap.put("channel_key_1", new ChannelDefinition("channel_key_1", "channel 1"));
+        channelMap.put("2", new ChannelDefinition("2", "channel 2"));
 
         Mockito.when(channelMapFactory.build()).thenReturn(channelMap);
 
@@ -58,7 +58,7 @@ public class DiscordWebsiteApplicationTest {
 
         this.mockMvc.perform(
                 get("/")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("[{\"id\":\"channel_key_1\", \"name\":\"channel 1\"}{\"id\":\"2\", \"name\":\"channel 2\"}]")));
+                .andExpect(content().string(containsString("{\"channel_key_1\":{\"id\":\"channel_key_1\",\"name\":\"channel 1\"},\"2\":{\"id\":\"2\",\"name\":\"channel 2\"}}")));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class DiscordWebsiteApplicationTest {
 
         this.mockMvc.perform(
                 get("/channel")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("[{\"id\":\"channel_key_1\", \"name\":\"channel 1\"}{\"id\":\"2\", \"name\":\"channel 2\"}]")));
+                .andExpect(content().string(containsString("{\"channel_key_1\":{\"id\":\"channel_key_1\",\"name\":\"channel 1\"},\"2\":{\"id\":\"2\",\"name\":\"channel 2\"}}")));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class DiscordWebsiteApplicationTest {
 
         this.mockMvc.perform(
                 get("/channel/channel_key_1")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("{\"id\":\"channel_key_1\", \"name\":\"channel 1\", \"messages\":[{\"author\":\"test_author\", \"timestamp\":\"2015-02-20T06:30\", \"content\":\"test_content\"}, {\"author\":\"test_author_2\", \"timestamp\":\"2015-02-21T06:30\", \"content\":\"test_content_2\"}]}")));
+                .andExpect(content().string(containsString("{\"channelDefinition\":{\"id\":\"channel_key_1\",\"name\":\"channel 1\"},\"messages\":[{\"author\":\"test_author\",\"timestamp\":{\"nano\":0,\"year\":2015,\"monthValue\":2,\"dayOfMonth\":20,\"hour\":6,\"minute\":30,\"second\":0,\"dayOfWeek\":\"FRIDAY\",\"dayOfYear\":51,\"month\":\"FEBRUARY\",\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"content\":\"test_content\",\"jsonstring\":\"{\\\"author\\\":\\\"test_author\\\", \\\"timestamp\\\":\\\"2015-02-20T06:30\\\", \\\"content\\\":\\\"test_content\\\"}\"},{\"author\":\"test_author_2\",\"timestamp\":{\"nano\":0,\"year\":2015,\"monthValue\":2,\"dayOfMonth\":21,\"hour\":6,\"minute\":30,\"second\":0,\"dayOfWeek\":\"SATURDAY\",\"dayOfYear\":52,\"month\":\"FEBRUARY\",\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"content\":\"test_content_2\",\"jsonstring\":\"{\\\"author\\\":\\\"test_author_2\\\", \\\"timestamp\\\":\\\"2015-02-21T06:30\\\", \\\"content\\\":\\\"test_content_2\\\"}\"}]}")));
     }
 
     @Test

@@ -1,5 +1,7 @@
 package nl.xanderelsas.discordwebsite.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.xanderelsas.discordwebsite.services.channellist.ChannelMapService;
 import nl.xanderelsas.discordwebsite.services.channellist.ChannelService;
 import org.springframework.http.MediaType;
@@ -19,13 +21,12 @@ public class DiscordChannelContentController
     }
 
     @GetMapping(value = {"/","/channel"}, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String channelList() {
-
-        return this.channelMapService.toString();
+    public String channelList() throws JsonProcessingException {
+        return (new ObjectMapper()).writeValueAsString(this.channelMapService.getChannelMap());
     }
 
     @GetMapping(value = "/channel/{channelId}", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String channelContent(@PathVariable String channelId, HttpServletResponse response) {
+    public String channelContent(@PathVariable String channelId, HttpServletResponse response) throws JsonProcessingException {
         ChannelService channelService = this.channelMapService.getChannelService(channelId);
 
         if (channelService == null) {
@@ -33,6 +34,6 @@ public class DiscordChannelContentController
             return "";
         }
 
-        return channelService.toString();
+        return (new ObjectMapper()).writeValueAsString(channelService.getChannel());
     }
 }
