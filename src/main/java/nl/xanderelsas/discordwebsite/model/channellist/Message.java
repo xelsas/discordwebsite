@@ -1,7 +1,5 @@
 package nl.xanderelsas.discordwebsite.model.channellist;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.time.LocalDateTime;
 
 /**
@@ -28,13 +26,5 @@ public class Message {
 
     public String getContent() {
         return content;
-    }
-
-    public String getJSONString() throws JsonProcessingException {
-        return "{" +
-                "\"author\":\"" + this.getAuthor() + '"' +
-                ", \"timestamp\":\"" + this.getTimestamp().toString() + '"' +
-                ", \"content\":\"" + this.getContent() + '"' +
-                '}';
     }
 }
