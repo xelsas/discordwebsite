@@ -8,7 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.xanderelsas.discordwebsite.model.discordobjects.Channel;
-import nl.xanderelsas.discordwebsite.services.channellist.ChannelDefinitionMapFactory;
+import nl.xanderelsas.discordwebsite.services.Config;
+import nl.xanderelsas.discordwebsite.services.channellist.ChannelMapFactory;
 import nl.xanderelsas.discordwebsite.model.discordobjects.Message;
 import nl.xanderelsas.discordwebsite.services.channellist.MessageListFactory;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ public class DiscordWebsiteApplicationTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ChannelDefinitionMapFactory channelDefinitionMapFactory;
+    private ChannelMapFactory channelMapFactory;
 
     @MockBean
     private MessageListFactory messageListFactory;
@@ -42,11 +43,11 @@ public class DiscordWebsiteApplicationTest {
     private void setupMocks() {
         Map<String, Channel> channelMap = this.getTestChannelMap();
 
-        Mockito.when(channelDefinitionMapFactory.build()).thenReturn(channelMap);
+        Mockito.when(channelMapFactory.build(Mockito.any(Config.class))).thenReturn(channelMap);
 
         List<Message> messages = this.getTestMessagesList();
 
-        Mockito.when(messageListFactory.build(Mockito.any(String.class))).thenReturn(messages);
+        Mockito.when(messageListFactory.build(Mockito.any(Config.class), Mockito.any(String.class))).thenReturn(messages);
     }
 
     private Map<String, Channel> getTestChannelMap() {

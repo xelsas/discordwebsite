@@ -2,6 +2,7 @@ package nl.xanderelsas.discordwebsite.services.channellist;
 
 import nl.xanderelsas.discordwebsite.model.discordobjects.Channel;
 import nl.xanderelsas.discordwebsite.model.discordobjects.Message;
+import nl.xanderelsas.discordwebsite.services.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.Map;
 @Service
 public class ChannelService {
     @Autowired
+    private Config config;
+    @Autowired
     private MessageListFactory messageListFactory;
     @Autowired
-    private ChannelDefinitionMapFactory channelDefinitionMapFactory;
+    private ChannelMapFactory channelMapFactory;
     private Map<String, Channel> channelMap;
 
     /**
@@ -25,7 +28,7 @@ public class ChannelService {
      */
     public Map<String, Channel> getChannelMap() {
         if (this.channelMap == null) {
-            this.channelMap = this.channelDefinitionMapFactory.build();
+            this.channelMap = this.channelMapFactory.build(this.config);
         }
 
         return this.channelMap;
@@ -45,6 +48,6 @@ public class ChannelService {
             return null;
         }
 
-        return this.messageListFactory.build(channel.getId());
+        return this.messageListFactory.build(this.config, channel.getId());
     }
 }
