@@ -1,5 +1,6 @@
 package nl.xanderelsas.discordwebsite.services.channellist;
 
+import nl.xanderelsas.discordwebsite.model.discordobjects.Channel;
 import nl.xanderelsas.discordwebsite.model.discordobjects.Message;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,8 @@ import java.util.List;
 public class MessageListFactory {
     /**
      *
-     * @param channelId
-     * @return a list of {@link Message} objects for the given channelId generated using data from a discord server.
+     * @param channelId channel id of the {@link Channel} you wish to retrieve the {@link List<Message>} for.
+     * @return {@link List<Message>} for the given channelId generated using data from a discord server.
      */
     public List<Message> build(String channelId) {
         List<Message> messages = new LinkedList<Message>();
