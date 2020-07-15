@@ -41,11 +41,11 @@ public class DiscordWebsiteApplicationTest {
     private MessageListFactory messageListFactory;
 
     private void setupMocks() {
-        Map<String, Channel> channelMap = this.getTestChannelMap();
+        Map<String, Channel> channelMap = getTestChannelMap();
 
         Mockito.when(channelMapFactory.build(Mockito.any(Config.class))).thenReturn(channelMap);
 
-        List<Message> messages = this.getTestMessagesList();
+        List<Message> messages = getTestMessagesList();
 
         Mockito.when(messageListFactory.build(Mockito.any(Config.class), Mockito.any(String.class))).thenReturn(messages);
     }
@@ -68,12 +68,12 @@ public class DiscordWebsiteApplicationTest {
     public void shouldReturnChannelList() throws Exception {
         setupMocks();
 
-        this.mockMvc.perform(
+        mockMvc.perform(
                 get("/channels")).andDo(print()).andExpect(status().isOk())
                 .andExpect(
                         content().string(
                                 containsString(
-                                        (new ObjectMapper()).writeValueAsString(this.getTestChannelMap())
+                                        (new ObjectMapper()).writeValueAsString(getTestChannelMap())
                                 )
                         )
                 );
@@ -83,12 +83,12 @@ public class DiscordWebsiteApplicationTest {
     public void shouldReturnChannel() throws Exception {
         setupMocks();
 
-        this.mockMvc.perform(
+        mockMvc.perform(
                 get("/channels/channel_key_1")).andDo(print()).andExpect(status().isOk())
                 .andExpect(
                         content().string(
                                 containsString(
-                                        (new ObjectMapper()).writeValueAsString(this.getTestChannelMap().get("channel_key_1"))
+                                        (new ObjectMapper()).writeValueAsString(getTestChannelMap().get("channel_key_1"))
                                 )
                         )
                 );
@@ -98,12 +98,12 @@ public class DiscordWebsiteApplicationTest {
     public void shouldReturnChannelMessages() throws Exception {
         setupMocks();
 
-        this.mockMvc.perform(
+        mockMvc.perform(
                 get("/channels/channel_key_1/messages")).andDo(print()).andExpect(status().isOk())
                 .andExpect(
                         content().string(
                                 containsString(
-                                        (new ObjectMapper()).writeValueAsString(this.getTestMessagesList())
+                                        (new ObjectMapper()).writeValueAsString(getTestMessagesList())
                                 )
                         )
                 );
@@ -113,7 +113,7 @@ public class DiscordWebsiteApplicationTest {
     public void shouldReturnChannelList404() throws Exception {
         setupMocks();
 
-        this.mockMvc.perform(
+        mockMvc.perform(
                 get("/channels/non_existing_channel")).andDo(print()).andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("")));
     }

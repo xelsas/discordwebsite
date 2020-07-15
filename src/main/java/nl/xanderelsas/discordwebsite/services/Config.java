@@ -16,7 +16,7 @@ public class Config {
     private String token;
 
     public Config() throws Exception {
-        this.loadFromConfigFile();
+        loadFromConfigFile();
     }
 
     private String getConfigFile() {
@@ -31,7 +31,7 @@ public class Config {
     private void loadFromConfigFile() throws Exception {
         Yaml yaml = new Yaml();
 
-        InputStream is = new FileInputStream(new File(this.getConfigFile()));
+        InputStream is = new FileInputStream(new File(getConfigFile()));
 
         Map<String, Object> result = yaml.load(is);
 

@@ -24,12 +24,12 @@ public class DiscordController
 
     @GetMapping(value = {"/channels"}, produces = MediaType.TEXT_PLAIN_VALUE)
     public String channelList() throws JsonProcessingException {
-        return (new ObjectMapper()).writeValueAsString(this.channelService.getChannelMap());
+        return (new ObjectMapper()).writeValueAsString(channelService.getChannelMap());
     }
 
     @GetMapping(value = "/channels/{channelId}", produces = MediaType.TEXT_PLAIN_VALUE)
     public String channel(@PathVariable String channelId, HttpServletResponse response) throws JsonProcessingException {
-        Channel channel = this.channelService.getChannelMap().get(channelId);
+        Channel channel = channelService.getChannelMap().get(channelId);
 
         if (channel == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -41,7 +41,7 @@ public class DiscordController
 
     @GetMapping(value = "/channels/{channelId}/messages", produces = MediaType.TEXT_PLAIN_VALUE)
     public String channelMessages(@PathVariable String channelId, HttpServletResponse response) throws JsonProcessingException {
-        List<Message> messageList = this.channelService.getMessages(channelId);
+        List<Message> messageList = channelService.getMessages(channelId);
 
         if (messageList == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

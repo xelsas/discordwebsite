@@ -27,11 +27,11 @@ public class ChannelService {
      * @return a {@link Map} of all available channels in the Discord server, represented by {@link Channel} objects.
      */
     public Map<String, Channel> getChannelMap() {
-        if (this.channelMap == null) {
-            this.channelMap = this.channelMapFactory.build(this.config);
+        if (channelMap == null) {
+            channelMap = channelMapFactory.build(config);
         }
 
-        return this.channelMap;
+        return channelMap;
     }
 
     /**
@@ -42,12 +42,12 @@ public class ChannelService {
      *         or null if no {@link Channel} with the given channelId could be found
      */
     public List<Message> getMessages(String channelId) {
-        Channel channel = this.getChannelMap().get(channelId);
+        Channel channel = getChannelMap().get(channelId);
 
         if (channel == null) {
             return null;
         }
 
-        return this.messageListFactory.build(this.config, channel.getId());
+        return messageListFactory.build(config, channel.getId());
     }
 }
