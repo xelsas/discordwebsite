@@ -1,6 +1,6 @@
 package nl.xanderelsas.discordwebsite.services.channellist;
 
-import nl.xanderelsas.discordwebsite.model.channellist.Message;
+import nl.xanderelsas.discordwebsite.model.discordobjects.Message;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

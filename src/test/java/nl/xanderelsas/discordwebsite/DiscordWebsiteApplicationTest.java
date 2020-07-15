@@ -6,9 +6,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import nl.xanderelsas.discordwebsite.model.channellist.ChannelDefinition;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.xanderelsas.discordwebsite.model.discordobjects.Channel;
 import nl.xanderelsas.discordwebsite.services.channellist.ChannelDefinitionMapFactory;
-import nl.xanderelsas.discordwebsite.model.channellist.Message;
+import nl.xanderelsas.discordwebsite.model.discordobjects.Message;
 import nl.xanderelsas.discordwebsite.services.channellist.MessageListFactory;
 import org.junit.jupiter.api.Test;
 
@@ -39,26 +40,27 @@ public class DiscordWebsiteApplicationTest {
     private MessageListFactory messageListFactory;
 
     private void setupMocks() {
-        Map<String, ChannelDefinition> channelMap = new LinkedHashMap<>();
-        channelMap.put("channel_key_1", new ChannelDefinition("channel_key_1", "channel 1"));
-        channelMap.put("2", new ChannelDefinition("2", "channel 2"));
+        Map<String, Channel> channelMap = this.getTestChannelMap();
 
         Mockito.when(channelDefinitionMapFactory.build()).thenReturn(channelMap);
 
-        List<Message> messages = new LinkedList<Message>();
-        messages.add(new Message("test_author", LocalDateTime.parse("2015-02-20T06:30:00"), "test_content"));
-        messages.add(new Message("test_author_2", LocalDateTime.parse("2015-02-21T06:30:00"), "test_content_2"));
+        List<Message> messages = this.getTestMessagesList();
 
         Mockito.when(messageListFactory.build(Mockito.any(String.class))).thenReturn(messages);
     }
 
-    @Test
-    public void shouldReturnChannelListRoot() throws Exception {
-        setupMocks();
+    private Map<String, Channel> getTestChannelMap() {
+        Map<String, Channel> channelMap = new LinkedHashMap<>();
+        channelMap.put("channel_key_1", new Channel("channel_key_1", "channel 1"));
+        channelMap.put("2", new Channel("2", "channel 2"));
+        return channelMap;
+    }
 
-        this.mockMvc.perform(
-                get("/")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("{\"channel_key_1\":{\"id\":\"channel_key_1\",\"name\":\"channel 1\"},\"2\":{\"id\":\"2\",\"name\":\"channel 2\"}}")));
+    private List<Message> getTestMessagesList() {
+        List<Message> messages = new LinkedList<Message>();
+        messages.add(new Message("test_author", LocalDateTime.parse("2015-02-20T06:30:00"), "test_content"));
+        messages.add(new Message("test_author_2", LocalDateTime.parse("2015-02-21T06:30:00"), "test_content_2"));
+        return messages;
     }
 
     @Test
@@ -67,16 +69,43 @@ public class DiscordWebsiteApplicationTest {
 
         this.mockMvc.perform(
                 get("/channels")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("{\"channel_key_1\":{\"id\":\"channel_key_1\",\"name\":\"channel 1\"},\"2\":{\"id\":\"2\",\"name\":\"channel 2\"}}")));
+                .andExpect(
+                        content().string(
+                                containsString(
+                                        (new ObjectMapper()).writeValueAsString(this.getTestChannelMap())
+                                )
+                        )
+                );
     }
 
     @Test
-    public void shouldReturnChannelContent() throws Exception {
+    public void shouldReturnChannel() throws Exception {
         setupMocks();
 
         this.mockMvc.perform(
-                get("/channel/channel_key_1")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("{\"channelDefinition\":{\"id\":\"channel_key_1\",\"name\":\"channel 1\"},\"messages\":[{\"author\":\"test_author\",\"timestamp\":{\"nano\":0,\"year\":2015,\"monthValue\":2,\"dayOfMonth\":20,\"hour\":6,\"minute\":30,\"second\":0,\"dayOfWeek\":\"FRIDAY\",\"dayOfYear\":51,\"month\":\"FEBRUARY\",\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"content\":\"test_content\"},{\"author\":\"test_author_2\",\"timestamp\":{\"nano\":0,\"year\":2015,\"monthValue\":2,\"dayOfMonth\":21,\"hour\":6,\"minute\":30,\"second\":0,\"dayOfWeek\":\"SATURDAY\",\"dayOfYear\":52,\"month\":\"FEBRUARY\",\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"content\":\"test_content_2\"}]}")));
+                get("/channels/channel_key_1")).andDo(print()).andExpect(status().isOk())
+                .andExpect(
+                        content().string(
+                                containsString(
+                                        (new ObjectMapper()).writeValueAsString(this.getTestChannelMap().get("channel_key_1"))
+                                )
+                        )
+                );
+    }
+
+    @Test
+    public void shouldReturnChannelMessages() throws Exception {
+        setupMocks();
+
+        this.mockMvc.perform(
+                get("/channels/channel_key_1/messages")).andDo(print()).andExpect(status().isOk())
+                .andExpect(
+                        content().string(
+                                containsString(
+                                        (new ObjectMapper()).writeValueAsString(this.getTestMessagesList())
+                                )
+                        )
+                );
     }
 
     @Test
@@ -84,7 +113,7 @@ public class DiscordWebsiteApplicationTest {
         setupMocks();
 
         this.mockMvc.perform(
-                get("/channel/non_existing_channel")).andDo(print()).andExpect(status().isNotFound())
+                get("/channels/non_existing_channel")).andDo(print()).andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("")));
     }
 }

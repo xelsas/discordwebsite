@@ -1,13 +1,13 @@
-package nl.xanderelsas.discordwebsite.model.channellist;
+package nl.xanderelsas.discordwebsite.model.discordobjects;
 
 /**
- * Represents a channel definition.
+ * Represents a discord channel.
  */
-public class ChannelDefinition {
+public class Channel {
     private String id;
     private String name;
 
-    public ChannelDefinition(String id, String name) {
+    public Channel(String id, String name) {
         this.id = id;
         this.name = name;
     }

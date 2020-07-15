@@ -1,4 +1,4 @@
-package nl.xanderelsas.discordwebsite.model.channellist;
+package nl.xanderelsas.discordwebsite.model.discordobjects;
 
 import java.time.LocalDateTime;
 
